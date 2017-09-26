@@ -27,7 +27,7 @@ enemy_img.setColorKey([0, 0, 0])
 player = Player.new(400, 500, player_img)
 
 enemies = []
-10.times do
+15.times do
   enemies << Enemy.new(rand(800), rand(200), enemy_img)
 end
 
