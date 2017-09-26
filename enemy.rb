@@ -2,14 +2,11 @@
 
 class Enemy < Sprite
   def update
-    self.y += 1
+    self.y += rand(5)
+    self.x += (2-rand(5))
     if self.y >= Window.height - self.image.height
-      self.vanish
+      self.y = 0
+      self.x = rand(800)
     end
-  end
-
-  # 他のオブジェクトから衝突された際に呼ばれるメソッド
-  def hit(obj)
-    self.vanish
   end
 end

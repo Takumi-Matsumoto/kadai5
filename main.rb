@@ -1,6 +1,17 @@
 # coding: utf-8
 require 'dxruby'
 
+class Field
+  @@overflag=false
+  def gameover?
+    @@overflag
+  end
+  def gameover! flag=true
+    @@overflag = flag
+  end
+end
+field = Field.new
+
 require_relative 'player'
 require_relative 'enemy'
 
@@ -17,18 +28,43 @@ player = Player.new(400, 500, player_img)
 
 enemies = []
 10.times do
-  enemies << Enemy.new(rand(800), rand(600), enemy_img)
+  enemies << Enemy.new(rand(800), rand(200), enemy_img)
 end
 
-Window.loop do
+font = Font.new(30)
+
+time=0
+
+startflag=0
+
+Window.loop {
   break if Input.keyPush?(K_ESCAPE)
 
-  Sprite.update(enemies)
-  Sprite.draw(enemies)
+  if startflag==0
+  Window.draw_font(220, 240, "Enterキーを押してスタート", font)
+  end
 
-  player.update
-  player.draw
+  startflag=1 if Input.keyPush?(K_RETURN)
 
-  # 当たり判定
-  Sprite.check(player, enemies)
-end
+  if startflag==1
+  
+   Sprite.update(enemies)
+   Sprite.draw(enemies)
+
+   player.update
+   player.draw
+
+   Window.draw_font(0, 0, "#{(time/60)}", font)
+   
+   if field.gameover?
+    Window.draw_font(220, 240, "Game Over", font)
+    Window.draw_font(220, 340, "今回のスコア:#{time/60}秒", font)
+   else
+    time+=1
+   end
+
+   # 当たり判定
+   Sprite.check(enemies,player)
+
+  end
+}
